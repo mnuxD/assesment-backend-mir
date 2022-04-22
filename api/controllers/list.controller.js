@@ -1,5 +1,6 @@
 import { List } from "../models/index.js";
 
+// Create list to one user
 export const createList = async (req, res) => {
   const { userID } = req.body;
   const exist_list = await List.find({ userID });
@@ -17,6 +18,7 @@ export const createList = async (req, res) => {
   }
 };
 
+// Get all lists of all users
 export const getAllLists = async (request, response) => {
   try {
     const lists = await List.find();
@@ -27,6 +29,7 @@ export const getAllLists = async (request, response) => {
   }
 };
 
+//Get one list by its id
 export const getOneList = async (request, response) => {
   try {
     const { id: listID } = request.params;
@@ -39,6 +42,7 @@ export const getOneList = async (request, response) => {
   }
 };
 
+// get one list by id's user
 export const getListByUser = async (request, response) => {
   try {
     const { userID: userID } = request.params;
@@ -51,6 +55,7 @@ export const getListByUser = async (request, response) => {
   }
 };
 
+// delete one list by its id
 export const deleteList = async (req, res) => {
   const { id: listID } = req.params;
   try {
@@ -63,13 +68,15 @@ export const deleteList = async (req, res) => {
   }
 };
 
+//add items into a list by its id
 export const addItemsToList = async (req, res) => {
   const { id: listID } = req.params;
   const moreItems = req.body;
-  const list = await List.findById(listID);
-  const listToUpdate = await List.findById(listID);
+  const list = await List.findById(listID).lean();
+  const listToUpdate = { ...list };
   const newList = listToUpdate.list.concat(moreItems);
   listToUpdate.list = newList;
+
   try {
     List.updateOne(list, listToUpdate, (error, updatedList) => {
       if (!error) {

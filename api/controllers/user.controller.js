@@ -3,6 +3,7 @@ import { User } from "../models/index.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
+//register a new user
 export const register = async (req, res) => {
   const { email, password } = req.body;
   const user_exist = await User.find({ email });
@@ -24,12 +25,13 @@ export const register = async (req, res) => {
   try {
     const user = await newUser.save();
     console.log(newUser);
-    res.status(201).send();
+    res.status(201).json(user);
   } catch (error) {
     res.status(500).send();
   }
 };
 
+// login user
 export const login = async (req, res) => {
   const { email, password } = req.body;
 
@@ -60,6 +62,7 @@ export const login = async (req, res) => {
   });
 };
 
+// get all users in the platform
 export const getAllUsers = async (request, response) => {
   try {
     const users = await User.find();
