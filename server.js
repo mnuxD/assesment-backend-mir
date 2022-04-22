@@ -4,6 +4,8 @@ import dotenv from "dotenv";
 import path from "path";
 import { fileURLToPath } from "url";
 
+import { userRouter, listRouter } from "./api/routes/index.js";
+
 // config environments
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -22,14 +24,15 @@ mongoose.connection.on("error", function (e) {
 
 // Express
 const app = express();
+app.use(express.json());
 
 // Routes
 app.get("/", (request, response) => {
   response.send("API FAVS");
 });
 
-//   app.use("/api", productRouter);
-//   app.use("/api", userRouter);
+app.use("/auth", userRouter);
+app.use("/api", listRouter);
 
 const PORT = process.env.PORT || 5000;
 
