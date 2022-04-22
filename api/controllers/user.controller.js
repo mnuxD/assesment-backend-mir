@@ -4,18 +4,30 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
 export const register = async (req, res) => {
-  const password = req.body.password;
-  const hash = await bcrypt.hash(password, 10);
+  const { email, password } = req.body;
+  const user_exist = await User.find({ email });
+  const characters = /^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
 
+  // Email and password validations
+  if (user_exist.length !== 0) {
+    console.log("Your password is already in use");
+    throw new Error();
+  } else if (!characters.test(password)) {
+    console.log(
+      "Your password must include at least one lowercase letter, one uppercase letter, one number, and one symbol. Your password must be at least 8 characters"
+    );
+    throw new Error();
+  }
+
+  const hash = await bcrypt.hash(password, 10);
   const newUser = new User({ ...req.body, password: hash });
   try {
     const user = await newUser.save();
+    console.log(newUser);
     res.status(201).send();
   } catch (error) {
-    res.status(500).send(error);
+    res.status(500).send();
   }
-
-  console.log({ ...req.body, password: hash });
 };
 
 export const login = async (req, res) => {

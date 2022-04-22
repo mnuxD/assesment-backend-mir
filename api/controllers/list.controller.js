@@ -64,7 +64,6 @@ export const deleteList = async (req, res) => {
 };
 
 export const addItemsToList = async (req, res) => {
-  console.log("HOLAAAA");
   const { id: listID } = req.params;
   const moreItems = req.body;
   const list = await List.findById(listID);
