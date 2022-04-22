@@ -57,11 +57,26 @@ export const deleteList = async (req, res) => {
     const listToDelete = await List.findById(listID);
     if (!listToDelete) res.status(204).json({ error: "No list to delete" });
     const deletedList = await List.deleteOne(listToDelete);
-    //   User.deleteOne(userToDelete, (error, data) => {
-    //     console.log(error, data);
-    //   });
-    //   console.log("User to delete", userToDelete);
     if (deletedList) res.status(200).json(deletedList);
+  } catch (error) {
+    res.status(500).json({ error });
+  }
+};
+
+export const addItemsToList = async (req, res) => {
+  console.log("HOLAAAA");
+  const { id: listID } = req.params;
+  const moreItems = req.body;
+  const list = await List.findById(listID);
+  const listToUpdate = await List.findById(listID);
+  const newList = listToUpdate.list.concat(moreItems);
+  listToUpdate.list = newList;
+  try {
+    List.updateOne(list, listToUpdate, (error, updatedList) => {
+      if (!error) {
+        res.status(200).json(updatedList);
+      } else res.status(500).send(error);
+    });
   } catch (error) {
     res.status(500).json({ error });
   }
