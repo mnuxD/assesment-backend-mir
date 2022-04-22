@@ -33,3 +33,14 @@ You need to add a dev.env and test.env files containing:
 - SECRET_KEY
 
 to connect with the database and test database
+
+To start the project run:
+```
+npm run dev
+```
+
+and to start the testing run:
+```
+npm run server-test
+npm run test
+```
