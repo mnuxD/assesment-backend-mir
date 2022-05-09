@@ -2,11 +2,17 @@
 
 This is my assessment about backend in the Make It Real bootcamp
 
+
+## Documentation
+
+https://documenter.getpostman.com/view/11015706/UyxeoTd4
+
+
 ## Pre-requirements
 
 You need to install:
 - **[Git](https://git-scm.com/downloads)** (Include Git Bash)
-- **[Node.js](https://nodejs.org/es/download/)**
+- **[Node.js](https://nodejs.org/es/download/)** v14.15.5
 
 
 Knowledge of: **JavaScript**, **Nodejs**, **Git** and **MongoDB**.
@@ -26,13 +32,6 @@ npm install
 ```
 
 ## Demo
-
-
-You need to add a dev.env and test.env files containing:
-- DB_STRING_CONNECTION
-- SECRET_KEY
-
-to connect with the database and test database
 
 To start the project run:
 ```
