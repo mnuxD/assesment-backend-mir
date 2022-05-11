@@ -4,7 +4,7 @@ import dotenv from "dotenv";
 import path from "path";
 import { fileURLToPath } from "url";
 
-import { userRouter, listRouter } from "./api/routes/index.js";
+import { userRouter, listRouter, authRouter } from "./api/routes/index.js";
 
 // config environments
 const __filename = fileURLToPath(import.meta.url);
@@ -32,6 +32,7 @@ app.get("/", (request, response) => {
 });
 
 app.use("/auth", userRouter);
+app.use("/auth", authRouter);
 app.use("/api", listRouter);
 
 const PORT = process.env.PORT || 5000;
