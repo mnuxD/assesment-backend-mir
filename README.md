@@ -7,6 +7,9 @@ This is my assessment about backend in the Make It Real bootcamp
 
 https://documenter.getpostman.com/view/11015706/UyxeoTd4
 
+## Deployment
+
+https://mabv-favs.herokuapp.com/
 
 ## Pre-requirements
 
