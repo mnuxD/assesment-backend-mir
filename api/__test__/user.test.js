@@ -13,18 +13,32 @@ describe("User tests", () => {
     expect(result.data).toBeDefined();
     expect(result.data.email).toEqual("test2@test.com");
   });
-  it.only("should login user", async () => {
-    const login = await axios.post("http://localhost:5000/auth/local/login", {
-      email: "test@test.com",
-      password: "Abc1234*",
-    });
-    expect(login.data.token).toBeDefined();
+
+  it("Email already exists", async () => {
+    const result = await axios
+      .post("http://localhost:5000/auth/local/register", {
+        email: "test2@test.com",
+        password: "Abc1234*",
+      })
+      .catch((e) => {
+        const status = e.response.status;
+        expect(status).toEqual(500);
+      });
   });
+
+  it("Password very short", async () => {
+    const result = await axios
+      .post("http://localhost:5000/auth/local/register", {
+        email: "test20@test.com",
+        password: "12345",
+      })
+      .catch((e) => {
+        const status = e.response.status;
+        expect(status).toEqual(500);
+      });
+  });
+
   it("should get all users", async () => {
-    const login = await axios.post("http://localhost:5000/auth/local/login", {
-      email: "test@test.com",
-      password: "Abc1234*",
-    });
     const users = await axios.get("http://localhost:5000/auth/local/users", {
       headers: {
         Authorization: `Bearer ${login.data.token}`,
