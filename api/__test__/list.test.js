@@ -36,6 +36,32 @@ describe("List tests", () => {
     expect(list.status).toEqual(201);
   });
 
+  it("missing data", async () => {
+    const list = await axios
+      .post(
+        "http://localhost:5000/api/favs",
+        {
+          userID: "6262dde086fb56e0c9d89255",
+          list: [
+            {
+              title: "Motos",
+              description: "Lista de motos favoritas",
+              link: "www.motos.com",
+            },
+          ],
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+      .catch((e) => {
+        const status = e.response.status;
+        expect(status).toEqual(500);
+      });
+  });
+
   it("Should get all lists", async () => {
     const lists = await axios.get("http://localhost:5000/api/favs", {
       headers: {
@@ -57,6 +83,19 @@ describe("List tests", () => {
     expect(list.status).toEqual(200);
   });
 
+  it("Shouldn't fetch a list of a non-existent user", async () => {
+    const list = await axios
+      .get("http://localhost:5000/api/favs/user/6262ce18518c6a5c915", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .catch((e) => {
+        const status = e.response.status;
+        expect(status).toEqual(500);
+      });
+  });
+
   it("Should get list by id", async () => {
     const list = await axios.get(
       "http://localhost:5000/api/favs/6262da79069e0f7814aea34c",
@@ -67,6 +106,19 @@ describe("List tests", () => {
       }
     );
     expect(list.status).toEqual(200);
+  });
+
+  it("Shouldn't fetch a nonexistent list", async () => {
+    const list = await axios
+      .get("http://localhost:5000/api/favs/6262da79069e0f7814", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .catch((e) => {
+        const status = e.response.status;
+        expect(status).toEqual(500);
+      });
   });
 
   it("Should delete one list", async () => {
@@ -81,9 +133,22 @@ describe("List tests", () => {
     expect(deletedList.status).toEqual(200);
   });
 
+  it("Shouldn't delete a non-existing list", async () => {
+    const deletedList = await axios
+      .delete("http://localhost:5000/api/favs/6262da79069e0f7814ae", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .catch((e) => {
+        const status = e.response.status;
+        expect(status).toEqual(500);
+      });
+  });
+
   it("Should add items to list", async () => {
     const listToUpdate = await axios.put(
-      "http://localhost:5000/api/favs/additems/6262de7aada15d81f781e3cc",
+      "http://localhost:5000/api/favs/additems/6262dedc633962db98384fb4",
       [
         {
           title: "Jarrones",
@@ -98,5 +163,50 @@ describe("List tests", () => {
       }
     );
     expect(listToUpdate.status).toEqual(200);
+  });
+
+  it("Shouldn't add an incomplete item", async () => {
+    const listToUpdate = await axios
+      .put(
+        "http://localhost:5000/api/favs/additems/6262dedc633962db98384fb4",
+        [
+          {
+            description: "Lista de jarrones favoritos",
+            link: "www.jarrones.com",
+          },
+        ],
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+      .catch((e) => {
+        const status = e.response.status;
+        expect(status).toEqual(500);
+      });
+  });
+
+  it("Shouldn't add an item to a non-existing list", async () => {
+    const listToUpdate = await axios
+      .put(
+        "http://localhost:5000/api/favs/additems/6262dedc633962db9",
+        [
+          {
+            title: "Jarrones",
+            description: "Lista de jarrones favoritos",
+            link: "www.jarrones.com",
+          },
+        ],
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+      .catch((e) => {
+        const status = e.response.status;
+        expect(status).toEqual(500);
+      });
   });
 });

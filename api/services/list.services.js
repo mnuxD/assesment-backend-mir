@@ -38,11 +38,12 @@ export const deleteOneList = async (id) => {
   return false;
 };
 
-export const updateOneList = async (id, items) => {
+export const updateOneList = async (id, item) => {
+  if (!item.title || !item.description || !item.link) throw new Error();
   const list = await List.findById(id).lean();
   const listToUpdate = await List.findById(id).lean();
   if (!list) throw new Error();
-  listToUpdate.list.push(items);
+  listToUpdate.list.push(item);
   await List.updateOne(list, listToUpdate);
   return listToUpdate;
 };
